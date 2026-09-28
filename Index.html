@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amala Tó Real — Food &amp; Event Spaces, FHA Lugbe, Abuja</title>
+<meta name="description" content="Amala Tó Real: real Nigerian food and event spaces for hire in FHA Lugbe, Abuja.">
+
+<!-- Fonts: Fraunces (display/headings) + Work Sans (body/UI). preconnect speeds up the
+     first font request; display=swap avoids invisible text while fonts load. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!--
+  ============================================================
+  AMALA TÓ REAL — CONCEPT WEBSITE (DEMO)
+  ============================================================
+  This is a single self-contained file: HTML + CSS + vanilla JS.
+  No frameworks, no build step. Open it in any browser.
+
+  HOW THIS FILE IS ORGANISED
+  1. <style>   — all CSS, organised by section, tokens at the top
+  2. <body>    — markup, in the same order as the sections appear
+  3. <script>  — small, independent behaviours at the bottom
+
+  PLACEHOLDER CONTENT
+  Anything not yet confirmed by the client (prices, phone number,
+  exact address, room capacities, real photos) is clearly marked
+  with a "TODO(owner):" comment right above it, and usually shows
+  a bracketed placeholder like [Phone number]. Search this file
+  for "TODO" to find every spot that needs real information before
+  this goes live.
+
+  IMAGES
+  There are no real photos yet, so dish/space/gallery visuals are
+  built with simple CSS patterns + labels instead of broken <img>
+  tags. Each placeholder tells you exactly what photo to drop in
+  and how — see the "Swap in a real photo" notes near .media-swap.
+  ============================================================
+-->
+
+<style>
+
+/* ============================================================
+   1. DESIGN TOKENS
+   ============================================================ */
+:root{
+  /* --- colour --- */
+  --ink:        #211610;   /* warm near-black, main text */
+  --ink-soft:   #4a382f;   /* secondary text on light bg */
+  --cream:      #F7EEDD;   /* base background */
+  --cream-deep: #EFE1C4;   /* alternate section background */
+  --paper:      #FFFCF6;   /* card surface */
+  --brick:      #A83D28;   /* primary accent — spice / brick */
+  --brick-dark: #832F1E;
+  --gold:       #CE9A3C;   /* secondary accent — gold thread */
+  --purple:      #3D1B4E;  /* brand accent — header, footer, rental CTA */
+  --purple-dark: #29113A;  /* purple hover / footer base */
+  --indigo:     #2B2455;   /* deep accent — used in the About section gradient */
+  --indigo-deep:#181233;   /* Event Rentals section background */
+  --green:      #3C5240;   /* event-space accent */
+  --line:       rgba(33,22,16,0.14);
+  --line-on-purple: rgba(255,255,255,0.2);
+
+  /* --- type --- */
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body:    'Work Sans', -apple-system, Segoe UI, sans-serif;
+
+  /* --- layout --- */
+  --max: 1180px;
+  --gutter: 20px;
+  --radius: 4px;
+  --sticky-cta-height: 64px;
+}
+
+/* ============================================================
+   2. RESET + BASE
+   ============================================================ */
+*, *::before, *::after{ box-sizing: border-box; }
+html{ scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior: auto; }
+  *, *::before, *::after{ animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+body{
+  margin: 0;
+  font-family: var(--font-body);
+  background: var(--cream);
+  color: var(--ink);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  padding-bottom: var(--sticky-cta-height); /* room for mobile sticky CTA bar */
+  overflow-x: hidden; /* defensive guard against any accidental horizontal scroll */
+}
+img{ max-width: 100%; display: block; }
+a{ color: inherit; }
+h1,h2,h3,h4{
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.12;
+  margin: 0 0 0.5em;
+  color: var(--ink);
+}
+p{ margin: 0 0 1em; }
+.container{
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+section{ padding: 64px 0; }
+@media (min-width: 900px){ section{ padding: 96px 0; } }
+.section-head{ max-width: 640px; margin-bottom: 40px; }
+.section-head p{ color: var(--ink-soft); font-size: 1.05rem; }
+.kicker{
+  display: inline-block;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--brick);
+  margin-bottom: 6px;
+}
+:focus-visible{
+  outline: 3px solid var(--purple);
+  outline-offset: 2px;
+}
+
+/* subtle textile-inspired texture, used as a background wash.
+   Hand-built diamond/dot motif — not a scan of any real fabric —
+   swap the two <stop> colours to retint it anywhere it's used. */
+/* ---- Media frame: shared architecture for every photo placeholder ----
+   Every dish/space/about/gallery visual is a .media-frame. It shows a
+   gradient placeholder by default. To drop in a real photograph later,
+   just add one line inside the element:
+     <img class="media-photo" src="your-photo.jpg" alt="Describe it">
+   The photo will automatically cover the gradient — no CSS edits
+   needed, and nothing else on the page has to change. */
+.media-frame{ position: relative; overflow: hidden; }
+.media-frame .media-photo{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.media-frame .media-tag{ position: relative; z-index: 1; }
+
+/* ---- Needs-info badge: one honest, visible way to flag anything not
+   yet confirmed by the client, instead of bracketed text buried in a
+   sentence. Use sparingly — one per fact, not one per word. ---- */
+.needs-info{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  color: var(--brick);
+  background: rgba(168,61,40,0.08);
+  border: 1px dashed rgba(168,61,40,0.4);
+  padding: 3px 9px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.needs-info::before{ content: "?"; font-family: var(--font-display); font-style: italic; }
+.on-dark .needs-info{
+  color: var(--gold);
+  background: rgba(206,154,60,0.1);
+  border-color: rgba(206,154,60,0.45);
+}
+
+/* ============================================================
+   3. BUTTONS
+   ============================================================ */
+.btn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.98rem;
+  padding: 14px 26px;
+  border-radius: var(--radius);
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+  white-space: nowrap;
+}
+.btn:active{ transform: translateY(1px); }
+.btn-primary{ background: var(--brick); color: var(--paper); }
+.btn-primary:hover{ background: var(--brick-dark); }
+.btn-secondary{ background: var(--purple); color: var(--paper); }
+.btn-secondary:hover{ background: var(--purple-dark); }
+.btn-outline{
+  background: transparent;
+  border-color: currentColor;
+  color: var(--ink);
+}
+.btn-outline:hover{ background: rgba(33,22,16,0.06); }
+.btn-block{ width: 100%; }
+
+.skip-link{
+  position: absolute;
+  top: -100px;
+  left: 12px;
+  z-index: 100;
+  background: var(--ink);
+  color: var(--cream);
+  padding: 12px 18px;
+  border-radius: var(--radius);
+  text-decoration: none;
+  font-weight: 600;
+  transition: top 0.15s ease;
+}
+.skip-link:focus{ top: 12px; }
+
+/* ============================================================
+   4. HEADER / NAV
+   ============================================================ */
+.site-header{
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--purple);
+  border-bottom: 1px solid transparent;
+  transition: box-shadow 0.2s ease;
+}
+.site-header.is-scrolled{
+  box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+}
+.site-header .container{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+}
+.logo{
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--paper);
+  letter-spacing: 0.01em;
+}
+.logo em{ color: var(--gold); font-style: italic; }
+
+.nav-toggle{
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.nav-toggle span{
+  display: block;
+  height: 2px;
+  width: 22px;
+  background: var(--paper);
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+.nav-toggle[aria-expanded="true"] span:nth-child(1){ transform: translateY(7px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] span:nth-child(2){ opacity: 0; }
+.nav-toggle[aria-expanded="true"] span:nth-child(3){ transform: translateY(-7px) rotate(-45deg); }
+
+.primary-nav{
+  position: fixed;
+  inset: 72px 0 0 0;
+  background: var(--purple);
+  padding: 24px var(--gutter) 40px;
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  overflow-y: auto;
+}
+.primary-nav.is-open{ transform: translateX(0); }
+.primary-nav ul{
+  list-style: none;
+  margin: 0 0 28px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.primary-nav a{
+  display: block;
+  padding: 14px 4px;
+  border-bottom: 1px solid var(--line-on-purple);
+  text-decoration: none;
+  font-size: 1.15rem;
+  font-family: var(--font-display);
+  color: var(--paper);
+}
+.nav-ctas{ display: flex; flex-direction: column; gap: 12px; }
+.nav-ctas .btn-outline{ color: var(--paper); border-color: rgba(255,255,255,0.55); }
+.nav-ctas .btn-outline:hover{ background: rgba(255,255,255,0.12); }
+
+@media (min-width: 900px){
+  .nav-toggle{ display: none; }
+  .primary-nav{
+    position: static;
+    inset: auto;
+    transform: none;
+    background: none;
+    padding: 0;
+    overflow: visible;
+  }
+  .primary-nav ul{
+    flex-direction: row;
+    align-items: center;
+    gap: 28px;
+    margin: 0;
+  }
+  .primary-nav a{
+    border-bottom: none;
+    padding: 6px 0;
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.98rem;
+    position: relative;
+  }
+  .primary-nav a::after{
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: -2px;
+    height: 2px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transition: transform 0.2s ease;
+  }
+  .primary-nav a:hover::after{ transform: scaleX(1); }
+  .site-header .container{
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 24px;
+  }
+  .primary-nav{ justify-self: center; }
+  .nav-ctas{ flex-direction: row; }
+}
+
+/* ============================================================
+   5. HERO
+   ============================================================ */
+.hero{
+  position: relative;
+  padding: 56px 0 72px;
+  background: var(--ink);
+  color: var(--cream);
+  overflow: hidden;
+}
+.hero::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 12px 12px, rgba(247,238,221,0.06) 2px, transparent 2.4px),
+    radial-gradient(circle at 32px 32px, rgba(247,238,221,0.06) 2px, transparent 2.4px);
+  background-size: 44px 44px;
+  pointer-events: none;
+}
+.hero::after{
+  content: "";
+  position: absolute;
+  right: -10%;
+  top: -20%;
+  width: 70%;
+  height: 140%;
+  background: radial-gradient(circle, rgba(168,61,40,0.35), transparent 65%);
+  pointer-events: none;
+}
+.hero-inner{ position: relative; max-width: 640px; }
+.hero h1{
+  color: var(--paper);
+  font-size: clamp(2.6rem, 9vw, 4.4rem);
+  margin-bottom: 0.2em;
+}
+.hero-statement{
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  color: var(--gold);
+  font-size: clamp(1.1rem, 3vw, 1.4rem);
+  margin-bottom: 16px;
+}
+.hero-tagline{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(247,238,221,0.85);
+  margin-bottom: 10px;
+}
+.hero-tagline::before{
+  content: "";
+  height: 1px;
+  width: 22px;
+  background: rgba(206,154,60,0.55);
+}
+.hero-location{
+  font-size: 0.9rem;
+  color: rgba(247,238,221,0.55);
+  margin-bottom: 24px;
+}
+.hero p.lede{
+  color: rgba(247,238,221,0.82);
+  font-size: 1.1rem;
+  max-width: 46ch;
+}
+
+/* The two primary journeys — deliberately equal weight, deliberately
+   the biggest tap targets on the page. Same #menu / #contact links
+   as before, just built to be unmissable. */
+.hero-journeys{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-top: 32px;
+  max-width: 560px;
+}
+@media (min-width: 560px){ .hero-journeys{ grid-template-columns: 1fr 1fr; } }
+
+.journey-card{
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 18px 20px;
+  border-radius: var(--radius);
+  text-decoration: none;
+  border: 1.5px solid transparent;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.journey-card:active{ transform: translateY(1px); }
+.journey-card .journey-label{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.15rem;
+}
+.journey-card .journey-sub{
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+.journey-card.journey-food{ background: var(--brick); color: var(--paper); }
+.journey-card.journey-food:hover{ background: var(--brick-dark); }
+.journey-card.journey-space{
+  background: transparent;
+  color: var(--paper);
+  border-color: rgba(247,238,221,0.4);
+}
+.journey-card.journey-space:hover{ border-color: var(--gold); background: rgba(247,238,221,0.06); }
+
+/* ============================================================
+   6. ABOUT
+   ============================================================ */
+.about .container{
+  display: grid;
+  gap: 36px;
+}
+.about-media{
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius);
+  background:
+    linear-gradient(160deg, var(--brick) 0%, var(--brick-dark) 55%, var(--indigo) 100%);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  padding: 20px;
+}
+.about-media .motif-overlay{
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle at 14px 14px, rgba(247,238,221,0.14) 2px, transparent 2.6px),
+    radial-gradient(circle at 34px 34px, rgba(247,238,221,0.14) 2px, transparent 2.6px);
+  background-size: 46px 46px;
+}
+.media-tag{
+  position: relative;
+  color: var(--paper);
+  font-size: 0.82rem;
+  background: rgba(33,22,16,0.35);
+  border: 1px solid rgba(247,238,221,0.4);
+  padding: 6px 12px;
+  border-radius: 999px;
+}
+.about-copy p{ color: var(--ink-soft); }
+.concept-flag{
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  background: var(--cream-deep);
+  border: 1px dashed var(--line);
+  padding: 8px 14px;
+  border-radius: var(--radius);
+  margin-bottom: 22px;
+  max-width: 54ch;
+  line-height: 1.45;
+}
+.about-note{
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+.about-note p{ margin: 0; font-size: 0.9rem; }
+
+@media (min-width: 860px){
+  .about .container{
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 60px;
+  }
+}
+
+/* ============================================================
+   7. MENU
+   ============================================================ */
+.menu{
+  background-color: var(--cream-deep);
+  background-image:
+    radial-gradient(circle at 10px 10px, rgba(168,61,40,0.05) 2px, transparent 2.4px),
+    radial-gradient(circle at 30px 30px, rgba(168,61,40,0.05) 2px, transparent 2.4px);
+  background-size: 40px 40px;
+}
+.menu-tabs{
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  margin-bottom: 28px;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.menu-tabs::-webkit-scrollbar{ display: none; }
+.menu-tab{
+  flex: 0 0 auto;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.92rem;
+  min-height: 44px;
+  padding: 12px 20px;
+  border-radius: 999px;
+  border: 1.5px solid var(--line);
+  background: var(--paper);
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+.menu-tab.is-active{
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--cream);
+}
+.menu-grid{
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 640px){ .menu-grid{ grid-template-columns: 1fr 1fr; } }
+@media (min-width: 980px){ .menu-grid{ grid-template-columns: 1fr 1fr 1fr; } }
+
+.dish-card{
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  display: none; /* toggled by JS based on active tab */
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+.dish-card.is-visible{ display: flex; flex-direction: column; }
+.dish-card:hover{ border-color: var(--brick); transform: translateY(-2px); }
+.dish-media{
+  aspect-ratio: 4 / 3;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding: 12px;
+}
+.dish-media .media-tag{ font-size: 0.72rem; padding: 4px 10px; }
+.dish-body{ padding: 18px 20px 22px; }
+.dish-body h3{ font-size: 1.2rem; margin-bottom: 6px; }
+.dish-body p{ font-size: 0.92rem; color: var(--ink-soft); margin-bottom: 12px; }
+.dish-price{
+  font-family: var(--font-display);
+  font-style: italic;
+  color: var(--brick);
+  font-size: 0.95rem;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+.menu-cta{ margin-top: 40px; }
+
+/* ============================================================
+   8. RENTAL SPACES
+   ============================================================ */
+.spaces{
+  position: relative;
+  background-color: var(--indigo-deep);
+  border-top: 3px solid var(--gold);
+  overflow: hidden;
+}
+.spaces::before{
+  /* structured line texture — deliberately geometric rather than the
+     food section's organic dots, to give rentals its own character */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(247,238,221,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(247,238,221,0.05) 1px, transparent 1px);
+  background-size: 42px 42px;
+  pointer-events: none;
+}
+.spaces .container{ position: relative; }
+.spaces .kicker{ color: var(--gold); }
+.spaces h2{ color: var(--paper); }
+.spaces .section-head p{ color: rgba(247,238,221,0.75); }
+
+.rental-grid{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+@media (min-width: 640px){ .rental-grid{ grid-template-columns: repeat(3, 1fr); gap: 20px; } }
+
+.rental-card{
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 14px 32px rgba(8,5,20,0.3);
+  display: flex;
+  flex-direction: column;
+}
+.rental-icon{
+  aspect-ratio: 4 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, var(--cream-deep), var(--cream));
+  color: var(--brick);
+}
+.rental-icon svg{ width: 42%; height: 42%; max-width: 60px; max-height: 60px; }
+.rental-card:nth-child(3n+2) .rental-icon{ color: var(--green); }
+.rental-card:nth-child(3n) .rental-icon{ color: var(--purple); }
+.rental-card h3{ font-size: 1.02rem; margin: 16px 16px 4px; }
+.rental-card .coming-soon{
+  margin: 0 16px 18px;
+  font-size: 0.8rem;
+  font-style: italic;
+  font-family: var(--font-display);
+  color: var(--ink-soft);
+}
+
+.rental-cta{ margin-top: 40px; }
+.rental-cta-note{
+  margin: 12px 0 0;
+  font-size: 0.85rem;
+  color: rgba(247,238,221,0.65);
+}
+
+/* ============================================================
+   8b. SMALL EVENTS — deliberately compact and secondary
+   ============================================================ */
+.small-events{
+  background: var(--cream-deep);
+  padding: 40px 0;
+}
+@media (min-width: 900px){ .small-events{ padding: 56px 0; } }
+.small-events-inner{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+}
+@media (min-width: 760px){
+  .small-events-inner{
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+  }
+}
+.small-events-copy{ max-width: 560px; }
+.small-events-copy p{ color: var(--ink-soft); margin-bottom: 10px; }
+.small-events .btn{ flex-shrink: 0; }
+
+/* ============================================================
+   9. GALLERY
+   ============================================================ */
+.gallery{ background: var(--cream-deep); }
+.gallery-grid{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+@media (min-width: 640px){ .gallery-grid{ grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 980px){ .gallery-grid{ grid-template-columns: repeat(4, 1fr); } }
+
+.gallery-item{
+  aspect-ratio: 1 / 1;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  color: var(--paper);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  text-align: left;
+}
+.gallery-item span{
+  position: relative;
+  padding: 10px 12px;
+  background: linear-gradient(to top, rgba(0,0,0,0.55), transparent);
+  width: 100%;
+}
+
+/* lightbox */
+.lightbox{
+  position: fixed;
+  inset: 0;
+  background: rgba(20,13,9,0.9);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 100;
+}
+.lightbox.is-open{ display: flex; }
+.lightbox-panel{
+  background: var(--paper);
+  max-width: 480px;
+  width: 100%;
+  border-radius: var(--radius);
+  padding: 28px;
+  position: relative;
+}
+.lightbox-close{
+  position: absolute;
+  top: 12px; right: 12px;
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--ink-soft);
+  padding: 6px;
+}
+.lightbox-panel h3{ margin-bottom: 8px; }
+.lightbox-panel p{ color: var(--ink-soft); font-size: 0.95rem; margin: 0; }
+
+/* ============================================================
+   10. LOCATION
+   ============================================================ */
+.location .container{ display: grid; gap: 28px; }
+.location-map{
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  aspect-ratio: 4 / 3;
+}
+.location-map iframe{ width: 100%; height: 100%; border: 0; }
+.location-details{
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 26px;
+}
+.location-details h3{ font-size: 1.05rem; margin-bottom: 4px; }
+.location-details p{ color: var(--ink-soft); font-size: 0.95rem; }
+.detail-block{ margin-bottom: 20px; }
+.detail-block:last-child{ margin-bottom: 0; }
+
+@media (min-width: 860px){
+  .location .container{ grid-template-columns: 1.3fr 1fr; align-items: start; }
+}
+
+/* ============================================================
+   11. CONTACT
+   ============================================================ */
+.contact{ background: var(--ink); color: var(--cream); }
+.contact .kicker{ color: var(--gold); }
+.contact .section-head p{ color: rgba(247,238,221,0.75); }
+.contact .container{ display: grid; gap: 40px; }
+
+.form-field{ margin-bottom: 18px; }
+.form-field label{
+  display: block;
+  font-size: 0.85rem;
+  margin-bottom: 6px;
+  color: rgba(247,238,221,0.85);
+}
+.form-field input,
+.form-field select,
+.form-field textarea{
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  padding: 12px 14px;
+  background: rgba(247,238,221,0.06);
+  border: 1px solid rgba(247,238,221,0.3);
+  border-radius: var(--radius);
+  color: var(--cream);
+}
+.form-field input::placeholder,
+.form-field textarea::placeholder{ color: rgba(247,238,221,0.4); }
+.form-field textarea{ resize: vertical; min-height: 110px; }
+.form-note{
+  font-size: 0.85rem;
+  color: rgba(247,238,221,0.6);
+  margin-top: 4px;
+}
+.form-status{
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: rgba(206,154,60,0.16);
+  border: 1px solid rgba(206,154,60,0.4);
+  font-size: 0.9rem;
+  display: none;
+}
+.form-status.is-visible{ display: block; }
+
+.contact-info-list{ list-style: none; margin: 0; padding: 0; }
+.contact-info-list li{
+  padding: 16px 0;
+  border-top: 1px solid rgba(247,238,221,0.16);
+}
+.contact-info-list li:first-child{ border-top: none; }
+.contact-info-list h4{
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.82rem;
+  color: var(--gold);
+  margin: 0 0 4px;
+}
+.contact-info-list p{ margin: 0; color: rgba(247,238,221,0.85); }
+.social-row{ display: flex; gap: 14px; margin-top: 18px; }
+.social-row a{
+  font-size: 0.9rem;
+  text-decoration: underline;
+  color: rgba(247,238,221,0.85);
+}
+
+@media (min-width: 900px){
+  .contact .container{ grid-template-columns: 1.1fr 0.9fr; }
+}
+
+/* ============================================================
+   12. FOOTER
+   ============================================================ */
+.site-footer{
+  background: var(--purple-dark);
+  color: rgba(247,238,221,0.65);
+  padding: 40px 0 100px;
+  font-size: 0.85rem;
+}
+.footer-top{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(247,238,221,0.14);
+  margin-bottom: 20px;
+}
+.footer-top .logo{ color: var(--cream); }
+.footer-nav{ list-style: none; display: flex; flex-wrap: wrap; gap: 18px; padding: 0; margin: 0; }
+.footer-nav a{ text-decoration: none; color: rgba(247,238,221,0.65); }
+.footer-nav a:hover{ color: var(--cream); }
+
+/* ============================================================
+   13. STICKY MOBILE CTA BAR
+   ============================================================ */
+.sticky-cta{
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 50;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: var(--sticky-cta-height);
+  border-top: 1px solid var(--line);
+}
+.sticky-cta a{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+}
+.sticky-cta .cta-food{ background: var(--brick); color: var(--paper); }
+.sticky-cta .cta-space{ background: var(--purple); color: var(--paper); }
+
+@media (min-width: 900px){
+  .sticky-cta{ display: none; }
+  body{ padding-bottom: 0; }
+}
+
+/* ============================================================
+   14. SMALL UTILITIES
+   ============================================================ */
+.visually-hidden{
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+}
+
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main-content">Skip to content</a>
+
+<!-- ============================================================
+     HEADER
+     ============================================================ -->
+<header class="site-header" id="siteHeader">
+  <div class="container">
+    <a href="#top" class="logo">Amala <em>Tó</em> Real</a>
+
+    <nav class="primary-nav" id="primaryNav">
+      <ul>
+        <li><a href="#about" data-nav-link>About</a></li>
+        <li><a href="#menu" data-nav-link>Menu</a></li>
+        <li><a href="#spaces" data-nav-link>Event Rentals</a></li>
+        <li><a href="#gallery" data-nav-link>Gallery</a></li>
+        <li><a href="#location" data-nav-link>Location</a></li>
+        <li><a href="#contact" data-nav-link>Contact</a></li>
+      </ul>
+      <div class="nav-ctas">
+        <a href="#menu" class="btn btn-primary" data-nav-link>Order food</a>
+        <a href="#contact" class="btn btn-outline" data-nav-link>Ask about rentals</a>
+      </div>
+    </nav>
+
+    <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="primaryNav" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="main-content">
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section class="hero" id="top">
+  <div class="container hero-inner">
+    <h1>Amala Tó Real</h1>
+    <p class="hero-statement">Good food. Useful rentals. Memorable gatherings.</p>
+    <p class="hero-tagline">Food &bull; Event Rentals &bull; Small Events</p>
+    <p class="hero-location">FHA Lugbe, Abuja</p>
+    <p class="lede">A kitchen serving proper swallow and slow-cooked soups, alongside event essentials — tables, chairs, canopies and more — available for hire.</p>
+    <div class="hero-journeys">
+      <a href="#menu" class="journey-card journey-food">
+        <span class="journey-label">Order food</span>
+        <span class="journey-sub">See the menu</span>
+      </a>
+      <a href="#spaces" class="journey-card journey-space">
+        <span class="journey-label">Rent event items</span>
+        <span class="journey-sub">Tables, chairs, canopies &amp; more</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     ABOUT
+     ============================================================ -->
+<section class="about" id="about">
+  <div class="container">
+
+    <!--
+      TODO(owner): Add a real photo of the restaurant interior, the
+      kitchen, or the founder — see the .media-frame comment near the
+      top of the CSS. In short: add
+        <img class="media-photo" src="your-photo.jpg" alt="Describe it">
+      inside this div. It will cover the gradient automatically.
+    -->
+    <div class="about-media media-frame">
+      <div class="motif-overlay"></div>
+      <span class="media-tag">Photo placeholder — restaurant interior</span>
+    </div>
+
+    <div class="about-copy">
+      <p class="kicker">Our story</p>
+      <h2>One kitchen, plus a hand with the rest</h2>
+      <p class="concept-flag">CONCEPT PLACEHOLDER — the two paragraphs below are illustrative copy written to show tone and length. Replace with the real story once confirmed.</p>
+      <p>Amala Tó Real started as a simple promise: swallow that's actually smooth, soup that's actually peppered right, and a plate that tastes like it was made for you specifically — not for a crowd.</p>
+      <p>As more people started asking for help beyond the food — tables, chairs, canopies and other event essentials — that side of the business grew too. Today Amala Tó Real serves food first, with equipment for hire and support for smaller gatherings alongside it.</p>
+
+      <div class="about-note">
+        <span class="needs-info">Client info needed</span>
+        <p>Real numbers belong here once confirmed — e.g. years serving FHA Lugbe, signature dishes, or events hosted.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     MENU
+     ============================================================ -->
+<section class="menu" id="menu">
+  <div class="container">
+    <div class="section-head">
+      <p class="kicker">Order food</p>
+      <h2>From the kitchen</h2>
+      <p class="concept-flag">CONCEPT PLACEHOLDER — categories and dishes below are a sample menu structure, not the confirmed offering. Replace freely.</p>
+    </div>
+
+    <div class="menu-tabs" id="menuTabs" role="tablist" aria-label="Menu categories">
+      <button class="menu-tab is-active" role="tab" aria-selected="true" data-category="swallow">Soups &amp; swallow</button>
+      <button class="menu-tab" role="tab" aria-selected="false" data-category="protein">Proteins &amp; sides</button>
+      <button class="menu-tab" role="tab" aria-selected="false" data-category="chops">Small chops</button>
+      <button class="menu-tab" role="tab" aria-selected="false" data-category="drinks">Drinks</button>
+      <button class="menu-tab" role="tab" aria-selected="false" data-category="rice">Rice</button>
+    </div>
+
+    <!--
+      TODO(owner): This is a SAMPLE menu structure, not the confirmed
+      offering. Edit freely:
+        - Change dish names/descriptions to match the real menu
+        - Add or remove .dish-card blocks as needed
+        - data-category on each card must match a button above
+        - Prices are intentionally left as "Price to be confirmed" since
+          none were confirmed — replace with real prices once set
+
+      PHOTOS: each card already points at images/food-01.jpg through
+      images/food-09.jpg (see the /images folder — add a README there
+      too). Drop real photos into /images using those exact filenames
+      and they'll appear automatically — no HTML/CSS changes needed.
+      Until then, the onerror="this.style.display='none'" on each
+      <img> hides the broken-image icon and quietly falls back to the
+      gradient placeholder + "Photo placeholder" tag, so the page
+      looks intentional either way. (food-09.jpg — Jollof Rice — has
+      no file yet on purpose; no confirmed photo exists for it.)
+    -->
+    <div class="menu-grid" id="menuGrid">
+
+      <article class="dish-card is-visible" data-category="swallow">
+        <div class="dish-media media-frame" style="background: linear-gradient(150deg,#A83D28,#6f2718);">
+          <img class="media-photo" src="images/food-01.jpg" alt="Amala &amp; ewedu" loading="lazy" onerror="this.style.display='none'">
+          <span class="media-tag">Photo placeholder</span>
+        </div>
+        <div class="dish-body">
+          <h3>Amala &amp; ewedu</h3>
+          <p>Smooth yam-flour swallow with a light, peppered ewedu.</p>
+          <p class="dish-price">Price to be confirmed</p>
+        </div>
+      </article>
+
+      <article class="dish-card" data-category="swallow">
+        <div class="dish-media media-frame" style="background: linear-gradient(150deg,#832F1E,#2B2455);">
+          <img class="media-photo" src="images/food-02.jpg" alt="Gbegiri &amp; ewedu combo" loading="lazy" onerror="this.style.display='none'">
+          <span class="media-tag">Photo placeholder</span>
+        </div>
+        <div class="dish-body">
+          <h3>Gbegiri &amp; ewedu combo</h3>
+          <p>Bean soup and ewedu served together, the classic pairing.</p>
+          <p class="dish-price">Price to be confirmed</p>
+        </div>
+      </article>
+
+      <article class="dish-card" data-category="swallow">
+        <div class="dish-media media-frame" style="background: linear-gradient(150deg,#CE9A3C,#A83D28);">
+          <img class="media-photo" src="images/food-03.jpg" alt="Efo riro & swallow of choice" loading="lazy" onerror="this.style.display='none'">
+          <span class="media-tag">Photo placeholder</span>
+        </div>
+        <div class="dish-body">
+          <h3>Efo riro &amp; swallow of choice</h3>
+          <p>Vegetable soup with your pick of amala, eba or pounded yam.</p>
+          <p class="dish-price">Price to be confirmed</p>
+        </div>
+      </article>
+
+      <article class="dish-card" data-category="protein">
+        <div class="dish-media media-frame" style="background: linear-gradient(150deg,#3C5240,#24331f);">
+          <img class="media-photo" src="images/food-04.jpg" alt="Assorted meat plate" loading="lazy" onerror="this.style.display='none'">
+          <span class="media-tag">Photo placeholder</span>
+        </div>
+        <div class="dish-body">
+          <h3>Assorted meat plate</h3>
+          <p>A mix of shaki, ponmo and beef, cooked into the soup or served on the side.</p>
+          <p class="dish-price">Price to be confirmed</p>
+        </div>
+      </article>
+
+      <article class="dish-card" data-category="protein">
+        <div class="dish-media media-frame" style="background: linear-gradient(150deg,#2B2455,#180F35);">
+          <img class="media-photo" src="images/food-05.jpg" alt="Grilled fish" loading="lazy" onerror="this.style.display='none'">
+          <span class="media-tag">Photo placeholder</span>
+        </div>
+        <div class="dish-body">
+          <h3>Grilled fish</h3>
+          <p>Whole fish, grilled and lightly spiced, served as a side to any soup.</p>
+          <p class="dish-price">Price to be confirmed</p>
+        </div>
+      </article>
+
+      <article class="dish-card" data-category="chops">
+        <div class="dish-media media-frame" style="background: linear-gradient(150deg,#CE9A3C,#6f2718);">
+          <img class="media-photo" src="images/food-06.jpg" alt="Puff-puff &amp; spring rolls" loading="lazy" onerror="this.style.display='none'">
+          <span class="media-tag">Photo placeholder</span>
+        </div>
+        <div class="dish-body">
+          <h3>Puff-puff &amp; spring rolls</h3>
+          <p>A mixed small chops tray, popular for events and casual orders alike.</p>
+          <p class="dish-price">Price to be confirmed</p>
+        </div>
+      </article>
+
+      <article class="dish-card" data-category="drinks">
+        <div class="dish-media media-frame" style="background: linear-gradient(150deg,#A83D28,#CE9A3C);">
+          <img class="media-photo" src="images/food-07.jpg" alt="Chilled zobo" loading="lazy" onerror="this.style.display='none'">
+          <span class="media-tag">Photo placeholder</span>
+        </div>
+        <div class="dish-body">
+          <h3>Chilled zobo</h3>
+          <p>House zobo, lightly spiced.</p>
+          <p class="dish-price">Price to be confirmed</p>
+        </div>
+      </article>
+
+      <article class="dish-card" data-category="rice">
+        <div class="dish-media media-frame" style="background: linear-gradient(150deg,#3C5240,#6f2718);">
+          <img class="media-photo" src="images/food-08.jpg" alt="Fried rice" loading="lazy" onerror="this.style.display='none'">
+          <span class="media-tag">Photo placeholder</span>
+        </div>
+        <div class="dish-body">
+          <h3>Fried Rice</h3>
+          <p>Fried rice</p>
+          <p class="dish-price">Price to be confirmed</p>
+        </div>
+      </article>
+
+      <article class="dish-card" data-category="rice">
+        <div class="dish-media media-frame" style="background: linear-gradient(150deg,#832F1E,#CE9A3C);">
+          <img class="media-photo" src="images/food-09.jpg" alt="Jollof rice" loading="lazy" onerror="this.style.display='none'">
+          <span class="media-tag">Photo placeholder</span>
+        </div>
+        <div class="dish-body">
+          <h3>Jollof Rice</h3>
+          <p>Jollof rice</p>
+          <p class="dish-price">Price to be confirmed</p>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="menu-cta">
+      <!-- TODO(owner): Point this at a real ordering channel (WhatsApp number, phone line, or delivery-app link) once confirmed. -->
+      <a href="#contact" class="btn btn-primary">Order food</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     EVENT RENTALS
+     (id kept as "spaces" for backward-compatible anchor links)
+     ============================================================ -->
+<section class="spaces" id="spaces">
+  <div class="container">
+    <div class="section-head">
+      <p class="kicker">Ask about rentals</p>
+      <h2>Event rentals</h2>
+      <p class="concept-flag">CONCEPT PLACEHOLDER — this shows the shape of an equipment-hire offering. Categories are illustrative; quantities, condition and pricing are all to be confirmed. Real photos of the actual inventory will replace these placeholders once available.</p>
+    </div>
+
+    <!--
+      TODO(owner): This is equipment hire (tables, chairs, canopies,
+      etc.) — NOT room/hall rental. Duplicate a .rental-card block per
+      category. Do not add quantities or prices until confirmed.
+      Once real inventory photos exist, add inside the .rental-icon
+      div: <img class="media-photo" src="your-photo.jpg" alt="...">
+      — the .rental-icon already has class="media-frame" so the photo
+      will cover the icon automatically.
+    -->
+    <div class="rental-grid">
+
+      <article class="rental-card">
+        <div class="rental-icon media-frame">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12M7 3v9h10V3M7 12l-1.5 9M17 12l1.5 9M8.5 16h7"/></svg>
+        </div>
+        <h3>Tables &amp; chairs</h3>
+        <p class="coming-soon">Photos coming soon</p>
+      </article>
+
+      <article class="rental-card">
+        <div class="rental-icon media-frame">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 15 12 4l10 11M12 4v17M4 21h16"/></svg>
+        </div>
+        <h3>Canopies</h3>
+        <p class="coming-soon">Photos coming soon</p>
+      </article>
+
+      <article class="rental-card">
+        <div class="rental-icon media-frame">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="12" r="6.5"/><path d="M18 5v6.5M16.5 5v4a1.5 1.5 0 0 0 3 0V5M18 11.5V19"/></svg>
+        </div>
+        <h3>Plates &amp; cutlery</h3>
+        <p class="coming-soon">Photos coming soon</p>
+      </article>
+
+      <article class="rental-card">
+        <div class="rental-icon media-frame">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="12" rx="9" ry="4"/><path d="M3 12c0 .9.3 1.7.8 2.5M21 12c0 .9-.3 1.7-.8 2.5"/></svg>
+        </div>
+        <h3>Serving equipment</h3>
+        <p class="coming-soon">Photos coming soon</p>
+      </article>
+
+      <article class="rental-card">
+        <div class="rental-icon media-frame">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9h14l-1.3 9.5a2 2 0 0 1-2 1.5H8.3a2 2 0 0 1-2-1.5L5 9Z"/><path d="M3 6.5h18M9 6.5V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1.5"/></svg>
+        </div>
+        <h3>Pots &amp; pans</h3>
+        <p class="coming-soon">Photos coming soon</p>
+      </article>
+
+      <article class="rental-card">
+        <div class="rental-icon media-frame">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5 12 4l9 4.5-9 4.5-9-4.5Z"/><path d="M3 8.5V16l9 4.5 9-4.5V8.5M12 13v7.5"/></svg>
+        </div>
+        <h3>Other event items</h3>
+        <p class="coming-soon">Photos coming soon</p>
+      </article>
+
+    </div>
+
+    <div class="rental-cta">
+      <a href="#contact" class="btn btn-secondary">Ask about rentals</a>
+      <p class="rental-cta-note">No online booking yet — enquiries go through the contact form below.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SMALL EVENTS
+     A deliberately smaller, secondary section — this is not the
+     main identity of the business, just a supporting offering.
+     ============================================================ -->
+<section class="small-events" id="small-events">
+  <div class="container small-events-inner">
+    <div class="small-events-copy">
+      <p class="kicker">Small events &amp; gatherings</p>
+      <h2>Planning something smaller?</h2>
+      <p>Birthdays, meetings or intimate gatherings — ask about available options and how the kitchen and rentals can support it.</p>
+      <p class="concept-flag">CONCEPT PLACEHOLDER — availability and details to be confirmed.</p>
+    </div>
+    <a href="#contact" class="btn btn-outline">Ask about small events</a>
+  </div>
+</section>
+
+<!-- ============================================================
+     GALLERY
+     ============================================================ -->
+<section class="gallery" id="gallery">
+  <div class="container">
+    <div class="section-head">
+      <p class="kicker">A look inside</p>
+      <h2>Gallery</h2>
+      <p class="concept-flag">CONCEPT PLACEHOLDER — photos below are temporary concept images, not confirmed photos of Amala Tó Real. Tap a tile for a closer look.</p>
+    </div>
+
+    <!--
+      TODO(owner): Each tile already points at images/gallery-01.jpg
+      through images/gallery-08.jpg. Swap in a real photo by replacing
+      that file (same filename) — no HTML/CSS changes needed. To add
+      a brand-new tile, copy a <button class="gallery-item media-frame">
+      block, give it the next gallery-0N.jpg filename, and update its
+      data-title / data-caption — the lightbox reads those
+      automatically, no JS changes needed.
+    -->
+    <div class="gallery-grid" id="galleryGrid">
+      <button class="gallery-item media-frame" style="background: linear-gradient(160deg,#A83D28,#6f2718);" data-title="Rice dish" data-caption="Concept placeholder photo — not a confirmed photo of Amala Tó Real."><img class="media-photo" src="images/gallery-01.jpg" alt="Rice dish" loading="lazy" onerror="this.style.display='none'"><span>Rice dish</span></button>
+      <button class="gallery-item media-frame" style="background: linear-gradient(160deg,#2B2455,#14112b);" data-title="Rice &amp; chicken" data-caption="Concept placeholder photo — not a confirmed photo of Amala Tó Real."><img class="media-photo" src="images/gallery-02.jpg" alt="Rice & chicken" loading="lazy" onerror="this.style.display='none'"><span>Rice &amp; chicken</span></button>
+      <button class="gallery-item media-frame" style="background: linear-gradient(160deg,#3C5240,#1f2b1c);" data-title="Swallow &amp; soup" data-caption="Concept placeholder photo — not a confirmed photo of Amala Tó Real."><img class="media-photo" src="images/gallery-03.jpg" alt="Swallow & soup" loading="lazy" onerror="this.style.display='none'"><span>Swallow &amp; soup</span></button>
+      <button class="gallery-item media-frame" style="background: linear-gradient(160deg,#CE9A3C,#7a5a1e);" data-title="Stew &amp; rice" data-caption="Concept placeholder photo — not a confirmed photo of Amala Tó Real."><img class="media-photo" src="images/gallery-04.jpg" alt="Stew & rice" loading="lazy" onerror="this.style.display='none'"><span>Stew &amp; rice</span></button>
+      <button class="gallery-item media-frame" style="background: linear-gradient(160deg,#832F1E,#2B2455);" data-title="Soup &amp; swallow" data-caption="Concept placeholder photo — not a confirmed photo of Amala Tó Real."><img class="media-photo" src="images/gallery-05.jpg" alt="Soup & swallow" loading="lazy" onerror="this.style.display='none'"><span>Soup &amp; swallow</span></button>
+      <button class="gallery-item media-frame" style="background: linear-gradient(160deg,#4b170e,#A83D28);" data-title="Rice dish" data-caption="Concept placeholder photo — not a confirmed photo of Amala Tó Real."><img class="media-photo" src="images/gallery-06.jpg" alt="Rice dish" loading="lazy" onerror="this.style.display='none'"><span>Rice dish</span></button>
+      <button class="gallery-item media-frame" style="background: linear-gradient(160deg,#14112b,#2B2455);" data-title="Soup &amp; swallow" data-caption="Concept placeholder photo — not a confirmed photo of Amala Tó Real."><img class="media-photo" src="images/gallery-07.jpg" alt="Soup & swallow" loading="lazy" onerror="this.style.display='none'"><span>Soup &amp; swallow</span></button>
+      <button class="gallery-item media-frame" style="background: linear-gradient(160deg,#7a5a1e,#CE9A3C);" data-title="Chicken" data-caption="Concept placeholder photo — not a confirmed photo of Amala Tó Real."><img class="media-photo" src="images/gallery-08.jpg" alt="Chicken" loading="lazy" onerror="this.style.display='none'"><span>Chicken</span></button>
+    </div>
+  </div>
+</section>
+
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-panel">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
+    <h3 id="lightboxTitle">Title</h3>
+    <p id="lightboxCaption">Caption</p>
+  </div>
+</div>
+
+<!-- ============================================================
+     LOCATION
+     ============================================================ -->
+<section class="location" id="location">
+  <div class="container">
+    <div>
+      <div class="section-head">
+        <p class="kicker">Find us</p>
+        <h2>FHA Lugbe, Abuja</h2>
+        <p>Map is centred on Lugbe for now — pin the exact building once the address is confirmed.</p>
+      </div>
+      <div class="location-map">
+        <!--
+          TODO(owner): This embed is centred on Lugbe, Abuja generally
+          — it is NOT pinned to a confirmed building. Once the exact
+          address is set, generate a proper embed at
+          https://www.openstreetmap.org/export/embed.html and swap
+          the src below, or replace with a Google Maps embed.
+        -->
+        <iframe
+          title="Map centred on FHA Lugbe, Abuja"
+          src="https://www.openstreetmap.org/export/embed.html?bbox=7.30%2C8.96%2C7.40%2C9.05&layer=mapnik"
+          loading="lazy">
+        </iframe>
+      </div>
+    </div>
+
+    <div class="location-details">
+      <div class="detail-block">
+        <h3>Address</h3>
+        <p>[Street address to be confirmed], FHA Lugbe, Abuja, Nigeria</p>
+      </div>
+      <div class="detail-block">
+        <h3>Opening hours</h3>
+        <p>[Placeholder — e.g. Monday–Sunday, 9am–9pm. Confirm real hours.]</p>
+      </div>
+      <div class="detail-block">
+        <h3>Parking</h3>
+        <p>[Placeholder — confirm on-site parking availability.]</p>
+      </div>
+      <a href="#contact" class="btn btn-outline btn-block">Get directions from us</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CONTACT
+     ============================================================ -->
+<section class="contact" id="contact">
+  <div class="container">
+    <div>
+      <div class="section-head">
+        <p class="kicker">Get in touch</p>
+        <h2>Order food or ask about rentals</h2>
+        <p>This form is a working demo — it doesn't send anywhere yet. Connect it to email, WhatsApp or a form service before launch.</p>
+      </div>
+
+      <!-- TODO(owner): This form has no backend yet. Wire it up to
+           a real email address, form service, or WhatsApp link
+           before launch. Right now, submitting just shows a
+           confirmation message via JS (see bottom of file). -->
+      <form id="contactForm" novalidate>
+        <div class="form-field">
+          <label for="fullName">Full name</label>
+          <input type="text" id="fullName" name="fullName" placeholder="Your name" required>
+        </div>
+        <div class="form-field">
+          <label for="phoneOrEmail">Phone or email</label>
+          <input type="text" id="phoneOrEmail" name="phoneOrEmail" placeholder="How should we reach you?" required>
+        </div>
+        <div class="form-field">
+          <label for="interest">I'm getting in touch about</label>
+          <select id="interest" name="interest">
+            <option value="food">Ordering food</option>
+            <option value="rentals">Renting event items</option>
+            <option value="small-event">A small event or gathering</option>
+            <option value="other">Something else</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" placeholder="Tell us what you need — date, occasion, order details..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Send message</button>
+        <p class="form-note">Demo form — no message is actually sent yet.</p>
+        <div class="form-status" id="formStatus" role="status"></div>
+      </form>
+    </div>
+
+    <div>
+      <ul class="contact-info-list">
+        <li>
+          <h4>Phone</h4>
+          <p>[Phone number to be added]</p>
+        </li>
+        <li>
+          <h4>Email</h4>
+          <p>[Email address to be added]</p>
+        </li>
+        <li>
+          <h4>WhatsApp</h4>
+          <p>[WhatsApp number to be added — useful for quick food orders]</p>
+        </li>
+        <li>
+          <h4>Address</h4>
+          <p>[Street address to be confirmed], FHA Lugbe, Abuja</p>
+        </li>
+      </ul>
+      <div class="social-row">
+        <!-- TODO(owner): link to real social profiles once set up -->
+        <a href="#">Instagram [add link]</a>
+        <a href="#">Facebook [add link]</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-top">
+      <a href="#top" class="logo">Amala <em>Tó</em> Real</a>
+      <ul class="footer-nav">
+        <li><a href="#about">About</a></li>
+        <li><a href="#menu">Menu</a></li>
+        <li><a href="#spaces">Event Rentals</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#location">Location</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <p>&copy; <span id="year"></span> Amala Tó Real, FHA Lugbe, Abuja. Concept site — not for production use as-is.</p>
+  </div>
+</footer>
+
+<!-- ============================================================
+     MOBILE STICKY CTA BAR
+     ============================================================ -->
+<div class="sticky-cta">
+  <a href="#menu" class="cta-food">Order food</a>
+  <a href="#contact" class="cta-space">Ask about rentals</a>
+</div>
+
+<!-- ============================================================
+     SCRIPT
+     Each behaviour below is small and independent, so you can
+     delete or change any one block without breaking the others.
+     ============================================================ -->
+<script>
+(function () {
+  "use strict";
+
+  /* ---- 1. Mobile nav toggle ---- */
+  var navToggle = document.getElementById('navToggle');
+  var primaryNav = document.getElementById('primaryNav');
+
+  function closeNav() {
+    primaryNav.classList.remove('is-open');
+    navToggle.setAttribute('aria-expanded', 'false');
+    navToggle.setAttribute('aria-label', 'Open menu');
+  }
+  function openNav() {
+    primaryNav.classList.add('is-open');
+    navToggle.setAttribute('aria-expanded', 'true');
+    navToggle.setAttribute('aria-label', 'Close menu');
+  }
+
+  navToggle.addEventListener('click', function () {
+    var isOpen = primaryNav.classList.contains('is-open');
+    if (isOpen) { closeNav(); } else { openNav(); }
+  });
+
+  // Close the mobile nav whenever a nav link is used
+  document.querySelectorAll('[data-nav-link]').forEach(function (link) {
+    link.addEventListener('click', closeNav);
+  });
+
+  /* ---- 2. Header shadow on scroll ---- */
+  var header = document.getElementById('siteHeader');
+  function updateHeaderState() {
+    if (window.scrollY > 8) {
+      header.classList.add('is-scrolled');
+    } else {
+      header.classList.remove('is-scrolled');
+    }
+  }
+  window.addEventListener('scroll', updateHeaderState, { passive: true });
+  updateHeaderState();
+
+  /* ---- 3. Menu category tabs ---- */
+  var tabs = document.querySelectorAll('.menu-tab');
+  var dishCards = document.querySelectorAll('.dish-card');
+
+  function setActiveCategory(category) {
+    tabs.forEach(function (tab) {
+      var isActive = tab.getAttribute('data-category') === category;
+      tab.classList.toggle('is-active', isActive);
+      tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    });
+    dishCards.forEach(function (card) {
+      card.classList.toggle('is-visible', card.getAttribute('data-category') === category);
+    });
+  }
+
+  tabs.forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      setActiveCategory(tab.getAttribute('data-category'));
+    });
+  });
+
+  /* ---- 4. Gallery lightbox ---- */
+  var lightbox = document.getElementById('lightbox');
+  var lightboxTitle = document.getElementById('lightboxTitle');
+  var lightboxCaption = document.getElementById('lightboxCaption');
+  var lightboxClose = document.getElementById('lightboxClose');
+
+  document.querySelectorAll('.gallery-item').forEach(function (item) {
+    item.addEventListener('click', function () {
+      lightboxTitle.textContent = item.getAttribute('data-title') || 'Photo';
+      lightboxCaption.textContent = item.getAttribute('data-caption') || '';
+      lightbox.classList.add('is-open');
+    });
+  });
+
+  function closeLightbox() { lightbox.classList.remove('is-open'); }
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', function (e) {
+    if (e.target === lightbox) { closeLightbox(); }
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { closeLightbox(); }
+  });
+
+  /* ---- 5. Contact form demo submit ---- */
+  var contactForm = document.getElementById('contactForm');
+  var formStatus = document.getElementById('formStatus');
+
+  contactForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    // TODO(owner): replace this with a real submission — e.g. send
+    // to an email service, a form backend, or build a WhatsApp
+    // "wa.me" link from the field values.
+    formStatus.textContent = 'Thanks — this is a demo, so nothing was actually sent. Once this form is wired up, messages like yours will reach the team directly.';
+    formStatus.classList.add('is-visible');
+    contactForm.reset();
+  });
+
+  /* ---- 6. Footer year ---- */
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+})();
+</script>
+
+</body>
+</html>
